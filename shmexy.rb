@@ -21,13 +21,20 @@ class Shmexy
 	end
 
 	def start
-		pp @settings
+		puts "Attempting to start Shmexy on #{@settings['ip']}:#{@settings['port']}"
 		EM.run do
-			@signature = EM.start_server @settings['ip'], @settings['port'], ShmexyConnection do |con|
-				con.id = UUIDTools::UUID.timestamp_create
-				con.server = self
-				@connections[con.id] = con
+			begin
+				@signature = EM.start_server @settings['ip'], @settings['port'], ShmexyConnection do |con|
+					con.id = UUIDTools::UUID.timestamp_create
+					con.server = self
+					@connections[con.id] = con
+				end
+			rescue StandardError => error
+				puts "Unable to start Shmexy on #{@settings['ip']}:#{@settings['port']}"
+			ensure
+				EM.stop
 			end
+
 		end
 	end
 
@@ -46,9 +53,16 @@ class Shmexy
 
 	def receive connection, data
 		puts "Recieved message from #{connection.id}, they said #{data}"
+
+		send connection, { "hello" => connection.id }
 	end
 
 	def send id, data
-		
+		puts ShmexyConnection::class
+		if id.class == ShmexyConnection::class
+			id.send_message(data)
+		else
+			@connections[id].send_messge(data) if @connections.has_key? id
+		end
 	end
 end
