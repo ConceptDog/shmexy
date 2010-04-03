@@ -31,10 +31,8 @@ class Shmexy
 				end
 			rescue StandardError => error
 				puts "Unable to start Shmexy on #{@settings['ip']}:#{@settings['port']}"
-			ensure
 				EM.stop
 			end
-
 		end
 	end
 
@@ -58,8 +56,7 @@ class Shmexy
 	end
 
 	def send id, data
-		puts ShmexyConnection::class
-		if id.class == ShmexyConnection::class
+		if id.is_a? ShmexyConnection
 			id.send_message(data)
 		else
 			@connections[id].send_messge(data) if @connections.has_key? id
