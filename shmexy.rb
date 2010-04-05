@@ -1,11 +1,12 @@
 require 'rubygems'
 require 'eventmachine'
 require 'uuidtools'
-require 'shmexy_connection'
 
 class Shmexy
 	attr_reader :signature
 	attr_reader :connections
+	attr_accessor :room_manager
+	attr_accessor :command_generator
 
 	def initialize
 		@connections = {}
@@ -13,7 +14,10 @@ class Shmexy
 	end
 
 	def Shmexy.create
-		self.new
+		shmexy = self.new
+		shmexy.room_manager = ShmexyRoomManager.new
+		shmexy.command_generator = ShmexyCommandGenerator.new
+		shmexy
 	end
 
 	def settings conf
@@ -59,7 +63,7 @@ class Shmexy
 		if id.is_a? ShmexyConnection
 			id.send_message(data)
 		else
-			@connections[id].send_messge(data) if @connections.has_key? id
+			@connections[id].send_message(data) if @connections.has_key? id
 		end
 	end
 end
