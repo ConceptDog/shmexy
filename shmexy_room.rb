@@ -1,6 +1,6 @@
-require 'revactor'
-
 class ShmexyRoom
+	include Shmexy::MessageGenerator
+	
 	attr_reader :id
 	attr_accessor :name
 	attr_accessor :members
@@ -11,8 +11,12 @@ class ShmexyRoom
 		@members = {}
 	end
 
+	def self.create
+		self.new UUIDTools::UUID.timestamp_create, "Default Room Name"
+	end
+
 	def []= (*params)
-		params.each { |value| @members[value.id] = value }
+		params.each { |value| joined_room( value ) }
 	end
 
 	def [] (value)
