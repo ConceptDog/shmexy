@@ -30,7 +30,6 @@ class ShmexyRoom
 	def left_room user
 
 	end
-
 	def message_room sender, message
 
 	end

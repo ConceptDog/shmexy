@@ -38,6 +38,8 @@ module Shmexy
 
 		def start
 			puts "Attempting to start Shmexy on #{@settings['ip']}:#{@settings['port']}"
+			EM.epoll
+			EM.kqueue
 			EM.run do
 				begin
 					@signature = EM.start_server @settings['ip'], @settings['port'], ShmexyConnection do |con|
@@ -55,7 +57,7 @@ module Shmexy
 
 		def stop
 			@connections.each_value { |con| con.close_connection }
-			EM.stop
+			EM.stop if EM.reactor_running?
 		end
 
 		def disconnect id
