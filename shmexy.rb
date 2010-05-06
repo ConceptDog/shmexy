@@ -7,12 +7,17 @@ module Shmexy
 	module MessageGenerator
 		def shmexy_response result, message
 			{ "result" => result, "message" => message }
-		end
+    end
+
+    def shmexy_error_response message
+      { "error" => message }
+    end
 	end
 
 	require 'shmexy_command_generator'
 	require 'shmexy_room_manager'
 	require 'shmexy_connection'
+  require 'shmexy_exception'
 
 	def self.create
 		shmexy = ShmexyServer.new
@@ -70,7 +75,7 @@ module Shmexy
 		end
 
 		def receive connection, data
-			@command_generator.command( connection, data )
+			raise ShmexyException, "Invalid Command" unless @command_generator.command( connection, data )
 		end
 
 		def send id, data

@@ -33,7 +33,9 @@ class ShmexyCommandGenerator
 				end
 			else
 				@server.send( connection, shmexy_response( false, "invalid command" ) )
-		end
+    end
+    
+    true
 	end
 
 	def validate_command command

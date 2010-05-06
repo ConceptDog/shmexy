@@ -45,7 +45,7 @@ class ShmexyRoomManager
 				EM.next_tick do
 					target = self[current_id]
 					target.left_room(user)
-					@rooms.delete(current_id) if target.size == 0					
+					@rooms.delete(current_id) if target.size == 0
 				end
 			end
 

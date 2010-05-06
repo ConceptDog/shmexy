@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'eventmachine'
 require 'json'
+require 'shmexy'
 
 class ShmexyConnection < EventMachine::Connection
+  include Shmexy::MessageGenerator
 	attr_accessor :id
 	attr_accessor :server
 
@@ -12,7 +14,7 @@ class ShmexyConnection < EventMachine::Connection
 		begin
 			decode = JSON data
 		rescue StandardError => error
-			send_message( { "error" => "syntax error" } )
+			send_message( shmexy_error_response( "syntax error" ) )
 			return
 		end
 
