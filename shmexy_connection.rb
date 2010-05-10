@@ -27,5 +27,9 @@ class ShmexyConnection < EventMachine::Connection
 	
 	def unbind
 		@server.drop self
-	end
+  end
+
+  def serialize
+    { "id" => @id }
+  end
 end

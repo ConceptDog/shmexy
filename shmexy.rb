@@ -12,6 +12,12 @@ module Shmexy
     def shmexy_error_response message
       { "error" => message }
     end
+
+    def shmexy_message type, body, from = nil
+      message = { "type" => type, "body" => body }
+      message["from"] = from unless from.nil?
+      message
+    end
 	end
 
 	require 'shmexy_command_generator'
