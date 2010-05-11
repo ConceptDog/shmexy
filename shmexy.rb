@@ -33,6 +33,8 @@ module Shmexy
 	end
 
 	class ShmexyServer
+    include MessageGenerator
+
 		attr_reader :signature
 		attr_reader :connections
 		attr_accessor :room_manager
@@ -57,6 +59,7 @@ module Shmexy
 						con.id = UUIDTools::UUID.timestamp_create
 						con.server = self
 						@connections[con.id] = con
+            send con, shmexy_message( "helo", con.id )
 					end
 				rescue StandardError => error
 					puts "Unable to start Shmexy on #{@settings['ip']}:#{@settings['port']}"
@@ -86,9 +89,9 @@ module Shmexy
 
 		def send id, data
 			if id.is_a? ShmexyConnection
-				EM.next_tick( id.send_message(data) )
+				EM.next_tick { id.send_message(data) }
 			else
-				EM.next_tick( @connections[id].send_message(data) ) if @connections.has_key? id
+				EM.next_tick { @connections[id].send_message(data) } if @connections.has_key? id
 			end
 		end
 	end

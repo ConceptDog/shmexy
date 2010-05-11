@@ -1,3 +1,5 @@
+require 'shmexy_room'
+
 class ShmexyRoomManager
 	attr_reader :rooms
 	attr_reader :membership
