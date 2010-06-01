@@ -28,10 +28,14 @@ class ShmexyCommandGenerator
 			when "leave"
 				EM.next_tick { @room_manager.leave_room connection }
       when "send"
-        EM.next_tick {shmexy_error_response( "message required" ) } unless command.has_key( 'message' )
+        EM.next_tick { @server.send( connection, shmexy_error_response( "message required" ) ) } unless command.has_key?( 'message' )
 
-				if command.has_key( 'room' )
-					EM.next_tick { @room_manager[ command['room'] ].message_room( connection, command['message'] ) }
+				if command.has_key?( 'room' )
+          if @room_manager.exists? command['room']
+					  EM.next_tick { @room_manager[ command['room'] ].message_room( connection, command['message'] ) }
+          else
+            EM.next_tick { @server.send( connection, shmexy_error_response( "room not found") ) }
+          end
 				else
 				 	@room_manager.find_membership.each { |current| EM.next_tick { current.message_room( connection, command['message'] ) } }
 				end

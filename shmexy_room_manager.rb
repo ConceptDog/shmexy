@@ -12,8 +12,12 @@ class ShmexyRoomManager
 	end
 
 	def [](signature)
-		@rooms[signature] if @rooms.key?(signature)
-	end
+		@rooms[signature] if @rooms.has_key?(signature)
+  end
+
+  def exists?(signature)
+    @rooms.has_key? signature
+  end
 
 	def find_membership id
 		@membership[id]
