@@ -6,7 +6,7 @@ class ShmexyRoom
 	attr_accessor :members
 
 	def initialize id, name = nil
-		@id = id
+		@id = id.to_s
 		@name = name
 		@members = {}
 	end

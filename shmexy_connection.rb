@@ -32,4 +32,8 @@ class ShmexyConnection < EventMachine::Connection
   def serialize
     { "id" => @id }
   end
+
+  def id(value)
+    @id = value.to_s
+  end
 end
