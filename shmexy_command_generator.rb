@@ -22,9 +22,9 @@ class ShmexyCommandGenerator
 			when "join"
 				if command.has_key?('parameters') and command['parameters'].has_key?('target')
 					EM.next_tick { @room_manager.join_room connection, command['parameters']['target']  }
+        else
+          EM.next_tick { @room_manager.join_room connection }
 				end
-
-				EM.next_tick { @room_manager.join_room connection }
 			when "leave"
 				EM.next_tick { @room_manager.leave_room connection }
       when "send"

@@ -33,7 +33,7 @@ class ShmexyConnection < EventMachine::Connection
     { "id" => @id }
   end
 
-  def id(value)
+  def id=(value)
     @id = value.to_s
   end
 end
