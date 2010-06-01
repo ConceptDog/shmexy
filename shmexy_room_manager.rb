@@ -16,7 +16,6 @@ class ShmexyRoomManager
   end
 
   def exists?(signature)
-    puts "rooms[signature] = #{@rooms[signature]}"
     @rooms.has_key? signature
   end
 
@@ -30,19 +29,10 @@ class ShmexyRoomManager
 		if signature.nil?
 			room = ShmexyRoom.create
 			@rooms[room.id] = room
-
-      puts "Created a Room: #{room.id}\n"
-      puts "Current Room List, size is now #{ @rooms.size }: \n"
-      @rooms.each { |key, current| puts "KEY: #{key}, ID: #{current.id}\n"}
-
 			return room[]= user
 		end
 
 		room = self[ signature ]
-
-    puts "Current Room List: \n"
-
-    @rooms.each { |current| puts "ID: #{current.id}\n"}
 
 		if room.nil?
 			EM.next_tick { user.send_message( shmexy_response( false, "room not found" ) ) }
