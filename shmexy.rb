@@ -58,6 +58,7 @@ module Shmexy
 					@signature = EM.start_server @settings['ip'], @settings['port'], ShmexyConnection do |con|
 						con.id = UUIDTools::UUID.timestamp_create
 						con.server = self
+            con.active = true
 						@connections[con.id] = con
             send con, shmexy_message( "helo", con.id )
 					end

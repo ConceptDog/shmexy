@@ -7,6 +7,7 @@ class ShmexyConnection < EventMachine::Connection
   include Shmexy::MessageGenerator
 	attr_accessor :id
 	attr_accessor :server
+  attr_accessor :active
 
 	def receive_data data
 		decode = nil
@@ -26,6 +27,7 @@ class ShmexyConnection < EventMachine::Connection
 	end
 	
 	def unbind
+    @active = false
 		@server.drop self
   end
 
@@ -35,5 +37,9 @@ class ShmexyConnection < EventMachine::Connection
 
   def id=(value)
     @id = value.to_s
+  end
+
+  def active?
+    @active
   end
 end

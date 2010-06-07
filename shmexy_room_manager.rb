@@ -45,8 +45,12 @@ class ShmexyRoomManager
 	def leave_room user, signature = nil
 		if signature.nil?
 			rooms = find_membership user.id
-			return EM.next_tick { user.send_message( shmexy_response( false, "no rooms" ) ) } if rooms.size == 0
 
+      if rooms.nil?
+         EM.next_tick { user.send_message( shmexy_response( false, "no rooms" ) ) } if user.active?
+         return
+      end
+      
 			rooms.each do |current_id|
 				EM.next_tick do
 					target = self[current_id]
